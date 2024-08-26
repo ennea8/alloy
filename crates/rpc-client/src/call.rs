@@ -99,7 +99,10 @@ where
                 }
                 CallStateProj::AwaitingResponse { fut } => {
                     let res = match task::ready!(fut.poll(cx)) {
-                        Ok(ResponsePacket::Single(res)) => Ready(transform_response(res)),
+                        Ok(ResponsePacket::Single(res)) => {
+                            trace!(?res, "received response");
+                            Ready(transform_response(res))
+                        },
                         Err(e) => Ready(RpcResult::Err(e)),
                         _ => panic!("received batch response from single request"),
                     };
