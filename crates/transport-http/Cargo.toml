@@ -52,6 +52,6 @@ hyper = [
     "dep:tower",
     "dep:tracing",
 ]
-reqwest-default-tls = ["reqwest?/default-tls"]
+reqwest-default-tls = ["reqwest?/rustls-tls"]
 reqwest-native-tls = ["reqwest?/native-tls"]
 reqwest-rustls-tls = ["reqwest?/rustls-tls"]
