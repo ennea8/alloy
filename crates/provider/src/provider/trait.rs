@@ -21,6 +21,9 @@ use alloy_transport::{BoxTransport, Transport, TransportErrorKind, TransportResu
 use serde_json::value::RawValue;
 use std::borrow::Cow;
 
+use serde::{Deserialize, Serialize};
+
+
 /// A task that polls the provider with `eth_getFilterChanges`, returning a list of `R`.
 ///
 /// See [`PollerBuilder`] for more details.
@@ -746,6 +749,16 @@ pub trait Provider<T: Transport + Clone = BoxTransport, N: Network = Ethereum>:
     async fn subscribe_pending_transactions(
         &self,
     ) -> TransportResult<alloy_pubsub::Subscription<B256>> {
+        self.root().pubsub_frontend()?;
+        let id = self.client().request("eth_subscribe", ("newPendingTransactions",)).await?;
+        self.root().get_subscription(id).await
+    }
+
+
+    #[cfg(feature = "pubsub")]
+    async fn subscribe_pending_transactions_raw(
+        &self,
+    ) -> TransportResult<alloy_pubsub::Subscription<serde_json::Value>> {
         self.root().pubsub_frontend()?;
         let id = self.client().request("eth_subscribe", ("newPendingTransactions",)).await?;
         self.root().get_subscription(id).await
