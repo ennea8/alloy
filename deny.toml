@@ -24,6 +24,7 @@ allow = [
     "MPL-2.0",
     # https://github.com/briansmith/ring/issues/902
     "LicenseRef-ring",
+    "Zlib"
 ]
 
 exceptions = [
